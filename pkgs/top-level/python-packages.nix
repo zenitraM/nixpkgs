@@ -6406,6 +6406,8 @@ self: super: with self; {
 
   lizard = callPackage ../development/python-modules/lizard { };
 
+  llama-cpp-python = callPackage ../development/python-modules/llama-cpp-python { };
+
   llfuse = callPackage ../development/python-modules/llfuse {
     inherit (pkgs) fuse;
   };
