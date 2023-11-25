@@ -1,5 +1,7 @@
 { lib
 , cmake
+, patchelf
+, autoPatchelfHook
 , darwin
 , fetchFromGitHub
 , fetchpatch
@@ -63,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace '[bundle pathForResource:@"ggml-metal" ofType:@"metal"];' "@\"$out/bin/ggml-metal.metal\";"
   '';
 
-  nativeBuildInputs = [ cmake ] ++ lib.optionals openblasSupport [ pkg-config ];
+  nativeBuildInputs = [ cmake patchelf autoPatchelfHook ] ++ lib.optionals openblasSupport [ pkg-config ];
 
   buildInputs = lib.optionals metalSupport
     (with darwin.apple_sdk.frameworks; [
@@ -89,6 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DLLAMA_NATIVE=OFF"
     "-DLLAMA_BUILD_SERVER=ON"
     "-DBUILD_SHARED_LIBS=ON"
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ]
   ++ lib.optionals metalSupport [
     "-DCMAKE_C_FLAGS=-D__ARM_FEATURE_DOTPROD=1"
